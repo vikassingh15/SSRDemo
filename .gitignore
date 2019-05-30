@@ -27,3 +27,8 @@ HELP.md
 
 ### VS Code ###
 .vscode/
+
+src/main/js/react-renderer/node_modules/
+src/main/ssr-app/node_modules/
+src/main/ssr-app/build/
+.mvn/node/
