@@ -1,7 +1,6 @@
 package com.demo.ssr.comments;
 
 import com.demo.ssr.utils.Functions;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +18,6 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @RestController
 @RequestMapping(value = "/api", produces = APPLICATION_JSON_VALUE)
-@Slf4j
 public class CommentResource {
 
 	@Autowired
@@ -27,7 +25,6 @@ public class CommentResource {
 
 	@RequestMapping(path = "/comments", method = POST)
 	public Comment add(@RequestBody Comment comment) {
-		log.info("{}", comment);
 		return repository.save(comment);
 	}
 

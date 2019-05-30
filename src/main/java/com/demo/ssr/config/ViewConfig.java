@@ -2,7 +2,6 @@ package com.demo.ssr.config;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -76,12 +75,16 @@ public class ViewConfig {
 		};
 	}
 
-	@SneakyThrows(IOException.class)
 	private String getBundleName() {
 		Resource manifestResource = resourceLoader.getResource("classpath:public/asset-manifest.json");
 
 		TypeReference<HashMap<String,String>> typeRef = new TypeReference<HashMap<String,String>>() {};
-		Map<String, String> manifest = mapper.readValue(manifestResource.getFile(), typeRef);
+		Map<String, String> manifest = null;
+		try {
+			manifest = mapper.readValue(manifestResource.getFile(), typeRef);
+		} catch (IOException e) {
+			throw new RuntimeException(e.getMessage());
+		}
 
 		return "public/" + manifest.get("main.js");
 	}
