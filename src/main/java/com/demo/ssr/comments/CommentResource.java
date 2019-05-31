@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -24,7 +25,7 @@ public class CommentResource {
 	private CommentRepository repository;
 
 	@RequestMapping(path = "/comments", method = POST)
-	public Comment add(@RequestBody Comment comment) {
+	public Comment add(@Valid @RequestBody Comment comment) {
 		return repository.save(comment);
 	}
 

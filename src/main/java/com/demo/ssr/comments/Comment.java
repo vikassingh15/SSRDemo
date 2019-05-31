@@ -1,8 +1,12 @@
 package com.demo.ssr.comments;
 
+import javax.validation.constraints.NotNull;
+
 public class Comment {
 	private Long id;
+	@NotNull
 	private String author;
+	@NotNull
 	private String content;
 
 	public Long getId() {
@@ -32,5 +36,8 @@ public class Comment {
 	public Comment(String author, String content) {
 		setAuthor(author);
 		setContent(content);
+	}
+
+	public Comment() {
 	}
 }
