@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.Resource;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.view.script.ScriptTemplateConfigurer;
@@ -45,7 +45,7 @@ public class ViewConfig {
 	 * Configures the {@link ScriptEngine} that will render our views.
 	 */
     @Bean
-    public ScriptTemplateConfigurer reactConfigurer() {
+    public ScriptTemplateConfigurer reactConfigurer() throws IOException {
         ScriptTemplateConfigurer configurer = new ScriptTemplateConfigurer();
         configurer.setEngineName("nashorn");
 
@@ -68,24 +68,16 @@ public class ViewConfig {
 	 *   <li><code>main.[hash].js</code> - all our application code, bundled up by Webpack, with a hashcode in the name</li>
 	 * </ul>
 	 */
-	private String[] getScripts() {
+	private String[] getScripts() throws IOException {
 		return new String[] {
 			"js/renderer.js",
 			getBundleName()
 		};
 	}
 
-	private String getBundleName() {
-		Resource manifestResource = resourceLoader.getResource("classpath:public/asset-manifest.json");
-
-		TypeReference<HashMap<String,String>> typeRef = new TypeReference<HashMap<String,String>>() {};
-		Map<String, String> manifest = null;
-		try {
-			manifest = mapper.readValue(manifestResource.getFile(), typeRef);
-		} catch (IOException e) {
-			throw new RuntimeException(e.getMessage());
-		}
-
+	private String getBundleName() throws IOException {
+		TypeReference<HashMap<String, String>> typeRef = new TypeReference<HashMap<String, String>>() {};
+		Map<String, String> manifest = mapper.readValue(new ClassPathResource("public/asset-manifest.json").getInputStream(), typeRef);
 		return "public/" + manifest.get("main.js");
 	}
 }
